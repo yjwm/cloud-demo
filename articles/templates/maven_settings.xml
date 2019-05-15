@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <!--本地的仓库地址，下载的jar会存放在本地这个地方-->
+    <localRepository>D:\maven_repo</localRepository>
+
+    <pluginGroups>
+
+    </pluginGroups>
+
+
+    <proxies>
+
+    </proxies>
+
+    <!--Maven打包发布时候需要的账号密码。可以为不同的项目配置不同的账号及其密码-->
+    <!--Snapshots测试版本-->
+    <!--Releases 稳定版本-->
+
+    <servers>
+        <server>
+            <id>nexus-snapshots</id>
+            <username>admin</username>
+            <password>admin123</password>
+        </server>
+        <server>
+            <id>nexus-releases</id>
+            <username>admin</username>
+            <password>admin123</password>
+        </server>
+    </servers>
+
+    <!--配置镜像-->
+    <mirrors>
+        <mirror>
+            <id>nexus</id>
+            <mirrorOf>*</mirrorOf>
+            <url>http://192.168.0.1:8081/nexus/content/groups/public/</url>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+
+        <profile>
+            <id>jdk-1.8</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>1.8</maven.compiler.source>
+                <maven.compiler.target>1.8</maven.compiler.target>
+                <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+            </properties>
+        </profile>
+
+
+        <!-- 指定默认的开发环境 -->
+        <profile>
+            <id>environment</id>
+            <!-- 默认激活 -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <environment.type>dev</environment.type>
+            </properties>
+
+
+        </profile>
+
+
+        <profile>
+            <!-- 生产环境 -->
+            <id>product</id>
+            <activation>
+                <property>
+                    <name>environment.type</name>
+                    <value>pro</value>
+                </property>
+            </activation>
+            <properties>
+                <profiles.active>pro</profiles.active>
+                <jdbc.driverClassName>jdbc.driverClassName.prosetting</jdbc.driverClassName>
+                <jdbc.url>urlsetting</jdbc.url>
+                <jdbc.username>usernamesetting</jdbc.username>
+                <jdbc.password>passwordsetting</jdbc.password>
+            </properties>
+        </profile>
+
+
+        <profile>
+            <id>nexus</id>
+            <repositories>
+                <repository>
+                    <id>nexus</id>
+                    <name>Nexus</name>
+                    <url>http://192.168.0.1:8081/nexus/content/groups/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+
+            <!--配置 Repositories pluginRepositories地址到nexus-->
+            <!--本地项目下载jar从nexus上下载(包括maven插件的jar)-->
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>nexus</id>
+                    <name>Nexus</name>
+                    <url>http://192.168.210.185:8081/nexus/content/groups/public/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
+
+    <!--激活 Profile nexus-->
+    <activeProfiles>
+        <activeProfile>nexus</activeProfile>
+    </activeProfiles>
+</settings>
+
